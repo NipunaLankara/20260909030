@@ -1,5 +1,6 @@
 package com.example.traning_management.entity;
 
+import com.example.traning_management.entity.enums.NominationStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,5 +43,9 @@ public class Nomination {
     private TrainingProgram trainingProgram;
 
     private LocalDateTime nominatedAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private NominationStatus status;
 
 }

@@ -5,7 +5,7 @@ import com.example.traning_management.dto.response.NominationResponseDTO;
 
 public interface NominationService {
 
-    NominationResponseDTO createNomination(
-            NominationRequestDTO request
-    );
+    NominationResponseDTO createNomination(NominationRequestDTO request);
+
+    NominationResponseDTO cancelNomination(Long nominationId);
 }
