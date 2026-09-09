@@ -1,13 +1,22 @@
 package com.example.traning_management.repo;
 
 import com.example.traning_management.entity.Nomination;
+
+import com.example.traning_management.entity.enums.NominationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface NominationRepository
-        extends JpaRepository<Nomination, Long> {
+import java.util.Optional;
 
-    boolean existsByOfficerIdAndTrainingProgramId(
-            Long officerId,
-            Long trainingProgramId
+@Repository
+public interface NominationRepository extends JpaRepository<Nomination, Long> {
+
+    boolean existsByOfficerIdAndTrainingProgramId(Long officerId, Long trainingProgramId);
+
+    long countByTrainingProgramIdAndStatus(Long trainingProgramId, NominationStatus status);
+
+    Optional<Nomination> findFirstByTrainingProgramIdAndStatusOrderByNominatedAtAsc(
+            Long trainingProgramId,
+            NominationStatus status
     );
 }

@@ -13,25 +13,40 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/nominations")
 public class NominationController {
 
-   @Autowired
-   private NominationService nominationService;
+    @Autowired
+    private NominationService nominationService;
 
     @PostMapping("/add")
     public ResponseEntity<StandardResponse> createNomination(
             @RequestBody NominationRequestDTO request
     ) {
-
-        NominationResponseDTO response =
-                nominationService.createNomination(request);
+        NominationResponseDTO response = nominationService.createNomination(request);
 
         StandardResponse standardResponse = new StandardResponse(
                 HttpStatus.CREATED.value(),
-                "Nomination created successfully",
+                "Nomination processed successfully",
                 response
         );
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
+                .body(standardResponse);
+    }
+
+    @PutMapping("/cancel/{id}")
+    public ResponseEntity<StandardResponse> cancelNomination(
+            @PathVariable Long id
+    ) {
+        NominationResponseDTO response = nominationService.cancelNomination(id);
+
+        StandardResponse standardResponse = new StandardResponse(
+                HttpStatus.OK.value(),
+                "Nomination cancelled successfully",
+                response
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .body(standardResponse);
     }
 }

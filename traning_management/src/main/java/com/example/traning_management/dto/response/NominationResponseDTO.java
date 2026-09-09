@@ -12,19 +12,12 @@ import java.time.LocalDateTime;
 public class NominationResponseDTO {
 
     private Long id;
-
     private Long officerId;
-
     private String officerName;
-
     private Long departmentId;
-
     private String departmentName;
-
     private Long trainingProgramId;
-
     private String trainingProgramTitle;
-
     private LocalDateTime nominatedAt;
-
+    private String status;
 }
