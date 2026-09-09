@@ -2,6 +2,7 @@ package com.example.traning_management.service.impl;
 
 import com.example.traning_management.dto.request.NominationRequestDTO;
 import com.example.traning_management.dto.response.NominationResponseDTO;
+import com.example.traning_management.eligibility.EligibilityRule;
 import com.example.traning_management.entity.Department;
 import com.example.traning_management.entity.Nomination;
 import com.example.traning_management.entity.Officer;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class NominationServiceImpl implements NominationService {
@@ -30,6 +32,9 @@ public class NominationServiceImpl implements NominationService {
     private TrainingProgramRepository trainingProgramRepository;
     @Autowired
     private DepartmentRepository departmentRepository;
+
+    @Autowired
+    private List<EligibilityRule> eligibilityRules;
 
     @Override
     @Transactional
@@ -48,17 +53,20 @@ public class NominationServiceImpl implements NominationService {
             );
         }
 
-        // 2. Get officer
+
         Officer officer = officerRepository.findById(request.getOfficerId())
                 .orElseThrow(() -> new RuntimeException("Officer not found"));
 
-        // 3. Get department
         Department department = departmentRepository.findById(request.getDepartmentId())
                 .orElseThrow(() -> new RuntimeException("Department not found"));
 
-        // 4. Get training programme
         TrainingProgram trainingProgram = trainingProgramRepository.findById(request.getTrainingProgramId())
                 .orElseThrow(() -> new RuntimeException("Training programme not found"));
+
+        //  Validate all eligibility rules dynamically
+        for (EligibilityRule rule : eligibilityRules) {
+            rule.validate(officer, trainingProgram);
+        }
 
         // 5. Check capacity and assign status
         long confirmedCount = nominationRepository.countByTrainingProgramIdAndStatus(

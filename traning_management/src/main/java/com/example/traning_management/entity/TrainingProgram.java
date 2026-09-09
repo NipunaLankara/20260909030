@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Set;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -26,5 +28,13 @@ public class TrainingProgram {
     private String trainer;
 
     private Integer maxParticipants;
+
+    @ManyToMany
+    @JoinTable(
+            name = "training_program_eligible_departments",
+            joinColumns = @JoinColumn(name = "training_program_id"),
+            inverseJoinColumns = @JoinColumn(name = "department_id")
+    )
+    private Set<Department> allowedDepartments;
 
 }
